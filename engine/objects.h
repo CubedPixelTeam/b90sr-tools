@@ -37,8 +37,13 @@ class ACierra{
     float x,y;
     u8 id,angle,rotid;
     bool flip;
-    s32 startingx,startingy,endy,sx,sy;
+    s32 startingx,startingy,endy,endx, sx,sy;
     void Create(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endposy);
     u8 vbl(s32 PlayerX, s32 PlayerY);
+    u8 vblnm(s32 PlayerX, s32 PlayerY);
+    u8 vblMX(s32 PlayerX, s32 PlayerY);
+    void CreateCustomX(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endx, s32 endposy);
+    void CreateCustomXb(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endx, s32 endposy);
+    void CreateB(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endposy);
 };
 #endif

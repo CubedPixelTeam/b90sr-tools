@@ -31,7 +31,8 @@ bool ACrystal::vbl(s32 PlayerX, s32 PlayerY){
    this->alive == true) {
         this->alive = false;
         this->sx = 256;
-        mmEffect(SFX_CRYS);
+        //mmEffect(SFX_CRYS);
+        AS_SoundQuickPlay(crys_soundfx);
         return 1;
    }
    PA_SetSpriteXY(1,this->id,this->sx,this->sy);
@@ -139,6 +140,17 @@ bool ACannon::vblRot(s32 PlayerX,s32 PlayerY, bool kill,u8 rotscaleid){
 }
 
 //"Cierra" code.
+
+void ACierra::CreateB(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endposy){
+    this->startingx = startingposx;
+    this->startingy = startingposy;
+    this->endy = endposy;
+    this->x = startingposx; this->y = startingposy;
+    this->id = id;
+    PA_CreateSprite(1,id,(void*)cierrab_Sprite,OBJ_SIZE_32X32,0,pal,x,y);
+    PA_SetSpritePrio(1,id,2);
+    return;
+}
 void ACierra::Create(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endposy){
     this->startingx = startingposx;
     this->startingy = startingposy;
@@ -149,21 +161,76 @@ void ACierra::Create(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endpo
     PA_SetSpritePrio(1,id,2);
     return;
 }
+void ACierra::CreateCustomX(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endx, s32 endposy){
+    this->startingx = startingposx;
+    this->startingy = startingposy;
+    this->endy = endposy; this->endx = endx;
+    this->x = startingposx; this->y = startingposy;
+    this->id = id;
+    PA_CreateSprite(1,id,(void*)cierra_Sprite,OBJ_SIZE_32X32,0,pal,x,y);
+    PA_SetSpritePrio(1,id,2);
+    return;
+}
+void ACierra::CreateCustomXb(u8 id, u8 pal, s32 startingposx,s32 startingposy, s32 endx, s32 endposy){
+    this->startingx = startingposx;
+    this->startingy = startingposy;
+    this->endy = endposy; this->endx = endx;
+    this->x = startingposx; this->y = startingposy;
+    this->id = id;
+    PA_CreateSprite(1,id,(void*)cierrab_Sprite,OBJ_SIZE_32X32,0,pal,x,y);
+    PA_SetSpritePrio(1,id,2);
+    return;
+}
 u8 ACierra::vbl(s32 PlayerX, s32 PlayerY){
-    if(this->y == this->endy||
-    this->y == this->startingy) this->flip = !this->flip;
+    if(this->startingy >= this->y) this->flip = true;
+    else if(this->endy <= this->y) this->flip = false;
     if(this->flip == true) this->y += 0.7;
     else this->y -= 0.7; 
 
    this->sx = this->x - PA_BgInfo[0][2].ScrollX;
    this->sy = this->y - PA_BgInfo[0][2].ScrollY;
-
-   PA_SetSpriteXY(1,this->id,this->sx,this->sy);
-   if((this->sx < -16 || this->sx > 272 )||
-   (this->sy < -16 || this->sy > 208)) {
+   
+   if((this->sx < -32 || this->sx > 288 )||
+   (this->sy < -32 || this->sy > 224)) {
    PA_SetSpriteX(1,this->id,256);
    }
-   if((this->x < PlayerX+16 && this->x > PlayerX-8 )&&
+   else PA_SetSpriteXY(1,this->id,this->sx,this->sy);
+   if((this->x < PlayerX+8 && this->x > PlayerX-8 )&&
+   (this->y < PlayerY + 16 && this->y > PlayerY - 8)) {
+        return 1;
+   }
+    return 0;
+}
+u8 ACierra::vblnm(s32 PlayerX,s32 PlayerY){
+   this->sx = this->x - PA_BgInfo[0][2].ScrollX;
+   this->sy = this->y - PA_BgInfo[0][2].ScrollY;
+   
+   if((this->sx < -32 || this->sx > 288 )||
+   (this->sy < -32 || this->sy > 224)) {
+   PA_SetSpriteX(1,this->id,256);
+   }
+   else PA_SetSpriteXY(1,this->id,this->sx,this->sy);
+   if((this->x < PlayerX+8 && this->x > PlayerX-8 )&&
+   (this->y < PlayerY + 16 && this->y > PlayerY - 8)) {
+        return 1;
+   }
+    return 0;
+}
+u8 ACierra::vblMX(s32 PlayerX,s32 PlayerY){
+    if(this->x <= this->startingx) this->flip = true;
+    else if(this->x >= this->endx) this->flip = false;
+    if(this->flip == true) this->x += 0.7;
+    else this->x -= 0.7; 
+
+   this->sx = this->x - PA_BgInfo[0][2].ScrollX;
+   this->sy = this->y - PA_BgInfo[0][2].ScrollY;
+   
+   if((this->sx < -32 || this->sx > 288 )||
+   (this->sy < -32 || this->sy > 224)) {
+   PA_SetSpriteX(1,this->id,256);
+   }
+   else PA_SetSpriteXY(1,this->id,this->sx,this->sy);
+   if((this->x < PlayerX+8 && this->x > PlayerX-8 )&&
    (this->y < PlayerY + 16 && this->y > PlayerY - 8)) {
         return 1;
    }

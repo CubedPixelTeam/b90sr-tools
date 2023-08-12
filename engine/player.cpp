@@ -4,6 +4,7 @@
 bool touchingGround = true;
 u8 jumptimer = 0;
 bool jump = false;
+int upDistance = 0;
 void APlayer::hflipSprite(bool flip){
 	this->hflip = flip;
 	if(flip == true) PA_SetRotsetNoAngle(1,0,-194,192);
@@ -115,7 +116,8 @@ u8 APlayer::Gravity(){
 				touchingGround = true;
 				jumptimer = 10;
 				this->g = -1;
-				mmEffect(SFX_JUMP);
+				//mmEffect(SFX_JUMP);
+				AS_SoundQuickPlay(jump_soundfx);
 			}
 		}
 		PA_SetSpriteAnimFrame(1,this->id,5);
@@ -158,9 +160,18 @@ u8 APlayer::Gravity(){
 		touchingGround = true;
 			jumptimer = 0;
 			this->g = -7;
-			mmEffect(SFX_JUMP);
+			//mmEffect(SFX_JUMP);
+			AS_SoundQuickPlay(jump_soundfx);
 		}
 	}
+	if(checkCollisionBottom(this->sx,this->sy + 31)!= 0){
+		for(int i = 0; i < 22; i ++){
+			if(checkCollisionBottom(this->sx,this->sy+31+upDistance)!=0)upDistance --;
+		}
+		this->y += upDistance + 2;
+		upDistance = 0;
+	}
+
 	if(pixel == this->trampoline) this->g = -13; 
 	else if(pixel == this->death) return 1; 
 	else if(pixel == this->utrampoline) this->g = -19; 
@@ -180,6 +191,7 @@ u8 APlayer::Gravity(){
 		this->g = 0;
 		touchingGround = false;
     }
+
 	if((Pad.Held.A || Pad.Held.B) && touchingGround == true){
 		jumptimer ++;
 		if(jumptimer < 12){
