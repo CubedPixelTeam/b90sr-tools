@@ -10,9 +10,8 @@ class APlayer{
     float g,vx;
     u8 id,speedcap,cbg,screenc;
     u8 trampoline,utrampoline,death,co,bp;
-    bool hflip,idlekillswitch,triggerkillswitch,looser_grav,airdash_killswitch;
+    bool hflip,idlekillswitch;
     u8 checkCollisionRight(s32 x, s32 y, s8 speed);
-    u8 checkCollisionLeft(s32 x, s32 y, s8 speed);
     u8 checkCollisionBottom(s32 x, s32 y);
     void Create(u8 id, s32 x, s32 y,u8 c,u8 b,u8 t, u8 d, u8 ut);
     void hflipSprite(bool hflip);
